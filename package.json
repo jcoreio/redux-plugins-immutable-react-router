@@ -1,6 +1,6 @@
 {
   "name": "redux-plugins-immutable-react-router",
-  "version": "2.0.0-beta2",
+  "version": "1.0.0-beta1",
   "description": "my personal skeleton for React library NPM packages",
   "main": "dist/index.js",
   "scripts": {
