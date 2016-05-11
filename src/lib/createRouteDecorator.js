@@ -41,7 +41,7 @@ export default function createRouteDecorator(store: Object): (routes: any) => an
       if (result) return decorateIndexRoute(result)
     }
   }
-  
+
   function decorateRoute(route: any): any {
     if (!route) return route
 
@@ -158,7 +158,7 @@ export default function createRouteDecorator(store: Object): (routes: any) => an
       }
     }
 
-    return size(newProps) ? {...route, ...newProps} : route    
+    return size(newProps) ? {...route, ...newProps} : route
   }
 
   function decorateRoutes(routes: any): any {

@@ -137,7 +137,7 @@ describe('createRouteDecorator', () => {
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
     })
   })
-  
+
   describe('indexRoute helpers', () => {
     it('processes getIndexRoute', () => {
       const TestRoute = <IndexRoute component="div" getIndexRouteFromStore={(location, store, cb) => []} />
@@ -158,7 +158,7 @@ describe('createRouteDecorator', () => {
       result = routes[0].getIndexRoute(null, null)
       expect(result.component).toBe('div')
       expect(result.getIndexRoute instanceof Function).toBe(true)
-      
+
       routes = decorateRoutes(
         <Route path="/" getIndexRoute={(location, cb) => cb(null, TestRoute)} />
       )
@@ -177,7 +177,7 @@ describe('createRouteDecorator', () => {
 
       const decorateRoutes = createRouteDecorator(store)
 
-      let routes, result
+      let routes
 
       routes = decorateRoutes(
         <Route path="/">
@@ -269,6 +269,34 @@ describe('createRouteDecorator', () => {
 
       result = routes[0].getIndexRoute(null, null)
       expect(result.getComponent instanceof Function).toBe(true)
-    })    
+    })
+  })
+  describe('component helpers', () => {
+    it('processes getComponentFromStore', () => {
+      const TestComp = () => <h1>It works!</h1>
+
+      const initialState = Immutable.Map({
+        comp: TestComp
+      })
+      const store = applyMiddleware(pluginMiddleware)(createStore)(pluginReducer, initialState)
+
+      const decorateRoutes = createRouteDecorator(store)
+
+      let routes, result
+
+      routes = decorateRoutes(
+        <Route getComponentFromStore={(location, store, cb) => store.getState().get('comp')} />
+      )
+
+      result = routes[0].getComponent(null, null)
+      expect(result).toBe(TestComp)
+
+      routes = decorateRoutes(
+        <Route getComponentFromStore={(location, store, cb) => cb(null, store.getState().get('comp'))} />
+      )
+
+      routes[0].getComponent(null, (err, comp) => result = comp)
+      expect(result).toBe(TestComp)
+    })
   })
 })

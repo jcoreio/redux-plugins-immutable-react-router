@@ -10,8 +10,8 @@ import {mount} from 'enzyme'
 describe('Router', () => {
   it("successfully loads a route and that route's component from plugins", done => {
     const PLUGIN_KEY = 'plugin1'
-    
-    const TestRoute = <Route path="test" componentKey="test" pluginKey={PLUGIN_KEY}/>
+
+    const TestRoute = <Route path="test" componentKey="test" pluginKey={PLUGIN_KEY} />
     const TestComponent = () => <h1>It works!</h1>
 
     const initialState = Immutable.fromJS({
