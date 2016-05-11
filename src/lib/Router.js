@@ -2,6 +2,7 @@
 
 import React, {Component, PropTypes} from 'react'
 import {Router as ReactRouter} from 'react-router'
+import {createSelector} from 'reselect'
 
 import createRouteDecorator from './createRouteDecorator'
 
@@ -21,12 +22,17 @@ export default class Router extends Component<void, Props, void> {
     store: PropTypes.object
   };
 
+  // cache routes so that we don't pass a new copy of the same routes to ReactRouter.
+  // if we passed the result of createRouteDecorator(store) every time, it would be a new object and react-router
+  // would warn that the routes shouldn't be changed.  However, if the user does change the routes, this will make
+  // it warn correctly.
+  selectRoutes: (props: Props, context: Object) => any = createSelector(
+    (props, context) => props.store || context.store,
+    props => props.routes || props.children,
+    (store, routes) => createRouteDecorator(store)(routes)
+  );
+
   render(): React.Element {
-    const store = this.props.store || this.context.store
-    if (!store) throw new Error('missing store from props or context')
-
-    const routes = createRouteDecorator(store)(this.props.routes || this.props.children)
-
-    return <ReactRouter {...this.props} routes={routes} children={null} />
+    return <ReactRouter {...this.props} routes={this.selectRoutes(this.props, this.context)} children={null} />
   }
 }
