@@ -1,7 +1,7 @@
 {
   "name": "redux-plugins-immutable-react-router",
   "version": "1.0.0-beta1",
-  "description": "my personal skeleton for React library NPM packages",
+  "description": "Inject routes into react-router from plugins in redux state",
   "main": "dist/index.js",
   "scripts": {
     "test": "karma start",

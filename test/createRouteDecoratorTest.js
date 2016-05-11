@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route} from 'react-router'
+import {Route, IndexRoute} from 'react-router'
 import * as Immutable from 'immutable'
 import {pluginReducer, pluginMiddleware, pluginActions} from 'redux-plugins-immutable'
 import {createStore, applyMiddleware} from 'redux'
@@ -136,5 +136,139 @@ describe('createRouteDecorator', () => {
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
     })
+  })
+  
+  describe('indexRoute helpers', () => {
+    it('processes getIndexRoute', () => {
+      const TestRoute = <IndexRoute component="div" getIndexRouteFromStore={(location, store, cb) => []} />
+
+      const initialState = Immutable.Map({
+        route: TestRoute
+      })
+      const store = applyMiddleware(pluginMiddleware)(createStore)(pluginReducer, initialState)
+
+      const decorateRoutes = createRouteDecorator(store)
+
+      let routes, result
+
+      routes = decorateRoutes(
+        <Route path="/" getIndexRoute={(location, cb) => TestRoute} />
+      )
+
+      result = routes[0].getIndexRoute(null, null)
+      expect(result.component).toBe('div')
+      expect(result.getIndexRoute instanceof Function).toBe(true)
+      
+      routes = decorateRoutes(
+        <Route path="/" getIndexRoute={(location, cb) => cb(null, TestRoute)} />
+      )
+
+      routes[0].getIndexRoute(null, (err, route) => result = route)
+      expect(result.component).toBe('div')
+      expect(result.getIndexRoute instanceof Function).toBe(true)
+    })
+    it('processes indexRoute', () => {
+      const TestRoute = <IndexRoute getComponentFromStore={() => null} />
+
+      const initialState = Immutable.Map({
+        route: TestRoute
+      })
+      const store = applyMiddleware(pluginMiddleware)(createStore)(pluginReducer, initialState)
+
+      const decorateRoutes = createRouteDecorator(store)
+
+      let routes, result
+
+      routes = decorateRoutes(
+        <Route path="/">
+          {TestRoute}
+        </Route>
+      )
+
+      expect(routes[0].indexRoute.getComponent instanceof Function).toBe(true)
+    })
+    it('processes getIndexRouteFromStore', () => {
+      const TestRoute = <IndexRoute component="div" getIndexRouteFromStore={(location, store, cb) => []} />
+
+      const initialState = Immutable.Map({
+        route: TestRoute
+      })
+      const store = applyMiddleware(pluginMiddleware)(createStore)(pluginReducer, initialState)
+
+      const decorateRoutes = createRouteDecorator(store)
+
+      let routes, result
+
+      routes = decorateRoutes(
+        <Route path="/" getIndexRouteFromStore={(location, store, cb) => store.getState().get('route')} />
+      )
+
+      result = routes[0].getIndexRoute(null, null)
+      expect(result.component).toBe('div')
+      expect(result.getIndexRoute instanceof Function).toBe(true)
+
+      routes = decorateRoutes(
+        <Route path="/" getIndexRouteFromStore={(location, store, cb) => cb(null, store.getState().get('route'))} />
+      )
+
+      routes[0].getIndexRoute(null, (err, route) => result = route)
+      expect(result.component).toBe('div')
+      expect(result.getIndexRoute instanceof Function).toBe(true)
+
+    })
+    it('processes getIndexRouteFromPlugin', () => {
+      const TestRoute = <IndexRoute getComponentFromStore={() => null} />
+
+      const PLUGIN_KEY = 'plugin1'
+      const initialState = Immutable.fromJS({
+        plugins: {}
+      })
+      const store = applyMiddleware(pluginMiddleware)(createStore)(pluginReducer, initialState)
+      store.dispatch(pluginActions.addPlugin(Immutable.fromJS({
+        key: PLUGIN_KEY,
+        name: 'Plugin 1',
+        routes: Immutable.Map({
+          test: TestRoute
+        })
+      })))
+
+      const decorateRoutes = createRouteDecorator(store)
+
+      let routes, result
+
+      routes = decorateRoutes(
+        <Route path="/" getIndexRouteFromPlugin={(location, plugin) => plugin.getIn(['routes', 'test'])} />
+      )
+
+      result = routes[0].getIndexRoute(null, null)
+      expect(result.getComponent instanceof Function).toBe(true)
+    })
+    it('processes indexRouteKey', () => {
+      const TestRoute = <IndexRoute getComponentFromStore={() => null} />
+
+      const PLUGIN_KEY = 'plugin1'
+      const initialState = Immutable.fromJS({
+        plugins: {}
+      })
+      const store = applyMiddleware(pluginMiddleware)(createStore)(pluginReducer, initialState)
+      store.dispatch(pluginActions.addPlugin(Immutable.fromJS({
+        key: PLUGIN_KEY,
+        name: 'Plugin 1',
+        routes: Immutable.Map({
+          test: TestRoute
+        })
+      })))
+
+      const decorateRoutes = createRouteDecorator(store)
+
+      let routes, result
+
+      routes = decorateRoutes(
+        <Route path="/" indexRouteKey="test" />
+      )
+
+      result = routes[0].getIndexRoute(null, null)
+      expect(result.getComponent instanceof Function).toBe(true)
+    })    
   })
 })
