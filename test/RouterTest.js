@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, hashHistory} from 'react-router'
-import Router from '../src/lib/Router'
+import Router from '../src/Router'
 import * as Immutable from 'immutable'
 import {pluginReducer, pluginMiddleware, pluginActions} from 'redux-plugins-immutable'
 import {createStore, applyMiddleware} from 'redux'

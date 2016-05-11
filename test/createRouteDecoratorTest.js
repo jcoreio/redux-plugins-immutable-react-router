@@ -4,7 +4,7 @@ import * as Immutable from 'immutable'
 import {pluginReducer, pluginMiddleware, pluginActions} from 'redux-plugins-immutable'
 import {createStore, applyMiddleware} from 'redux'
 
-import createRouteDecorator from '../src/lib/createRouteDecorator'
+import createRouteDecorator from '../src/createRouteDecorator'
 
 describe('createRouteDecorator', () => {
   describe('childRoutes helpers', () => {
