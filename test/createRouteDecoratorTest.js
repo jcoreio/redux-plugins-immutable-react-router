@@ -24,7 +24,7 @@ describe('createRouteDecorator', () => {
         <Route getChildRoutes={(location, cb) => TestRoute} />
       )
 
-      result = routes[0].getChildRoutes(null, null)
+      routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
 
@@ -68,7 +68,7 @@ describe('createRouteDecorator', () => {
         <Route getChildRoutesFromStore={(location, store, cb) => store.getState().get('route')} />
       )
 
-      result = routes[0].getChildRoutes(null, null)
+      routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
 
@@ -104,7 +104,7 @@ describe('createRouteDecorator', () => {
         <Route getChildRoutesFromPlugin={(location, plugin) => plugin.getIn(['routes', 'test'])} />
       )
 
-      result = routes[0].getChildRoutes(null, null)
+      routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
     })
@@ -132,7 +132,7 @@ describe('createRouteDecorator', () => {
         <Route childRoutesKey="test" />
       )
 
-      result = routes[0].getChildRoutes(null, null)
+      routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
     })
@@ -155,7 +155,7 @@ describe('createRouteDecorator', () => {
         <Route path="/" getIndexRoute={(location, cb) => TestRoute} />
       )
 
-      result = routes[0].getIndexRoute(null, null)
+      routes[0].getIndexRoute(null, (err, route) => result = route)
       expect(result.component).toBe('div')
       expect(result.getIndexRoute instanceof Function).toBe(true)
 
@@ -203,7 +203,7 @@ describe('createRouteDecorator', () => {
         <Route path="/" getIndexRouteFromStore={(location, store, cb) => store.getState().get('route')} />
       )
 
-      result = routes[0].getIndexRoute(null, null)
+      routes[0].getIndexRoute(null, (err, route) => result = route)
       expect(result.component).toBe('div')
       expect(result.getIndexRoute instanceof Function).toBe(true)
 
@@ -240,7 +240,7 @@ describe('createRouteDecorator', () => {
         <Route path="/" getIndexRouteFromPlugin={(location, plugin) => plugin.getIn(['routes', 'test'])} />
       )
 
-      result = routes[0].getIndexRoute(null, null)
+      routes[0].getIndexRoute(null, (err, route) => result = route)
       expect(result.getComponent instanceof Function).toBe(true)
     })
     it('processes indexRouteKey', () => {
@@ -267,7 +267,7 @@ describe('createRouteDecorator', () => {
         <Route path="/" indexRouteKey="test" />
       )
 
-      result = routes[0].getIndexRoute(null, null)
+      routes[0].getIndexRoute(null, (err, route) => result = route)
       expect(result.getComponent instanceof Function).toBe(true)
     })
   })

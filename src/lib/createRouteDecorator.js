@@ -15,7 +15,7 @@ export default function createRouteDecorator(store: Object): (routes: any) => an
         if (err) return cb(err)
         return cb(null, decorateRoutes(routes))
       })
-      if (result) return decorateRoutes(result)
+      if (result) cb(null, decorateRoutes(result))
     }
   }
 
@@ -38,7 +38,7 @@ export default function createRouteDecorator(store: Object): (routes: any) => an
         if (err) return cb(err)
         return cb(null, decorateIndexRoute(route))
       })
-      if (result) return decorateIndexRoute(result)
+      if (result) cb(null, decorateIndexRoute(result))
     }
   }
 
@@ -60,12 +60,12 @@ export default function createRouteDecorator(store: Object): (routes: any) => an
       newProps.getChildRoutes = wrapGetChildRoutes(getChildRoutesFromStore, store)
     }
     else if (getChildRoutesFromPlugin) {
-      newProps.getChildRoutes = (location, cb) =>
-        decorateRoutes(selectPluginRoutes(plugin => getChildRoutesFromPlugin(location, plugin))(store.getState()))
+      newProps.getChildRoutes = (location, cb) => cb(null,
+        decorateRoutes(selectPluginRoutes(plugin => getChildRoutesFromPlugin(location, plugin))(store.getState())))
     }
     else if (childRoutesKey) {
-      newProps.getChildRoutes = (location, cb) =>
-        decorateRoutes(selectPluginRoutes(childRoutesKey)(store.getState()))
+      newProps.getChildRoutes = (location, cb) => cb(null,
+        decorateRoutes(selectPluginRoutes(childRoutesKey)(store.getState())))
     }
     if (childRoutes) newProps.childRoutes = decorateRoutes(childRoutes)
 
@@ -82,12 +82,12 @@ export default function createRouteDecorator(store: Object): (routes: any) => an
       newProps.getIndexRoute = wrapGetIndexRoute(getIndexRouteFromStore, store)
     }
     if (getIndexRouteFromPlugin) {
-      newProps.getIndexRoute = (location, cb) =>
-        decorateIndexRoute(selectPluginRoutes(plugin => getIndexRouteFromPlugin(location, plugin))(store.getState()))
+      newProps.getIndexRoute = (location, cb) => cb(null,
+        decorateIndexRoute(selectPluginRoutes(plugin => getIndexRouteFromPlugin(location, plugin))(store.getState())))
     }
     if (indexRouteKey) {
-      newProps.getIndexRoute = (location, cb) =>
-        decorateIndexRoute(selectPluginRoutes(indexRouteKey)(store.getState()))
+      newProps.getIndexRoute = (location, cb) => cb(null,
+        decorateIndexRoute(selectPluginRoutes(indexRouteKey)(store.getState())))
     }
     if (indexRoute) newProps.indexRoute = decorateIndexRoute(indexRoute)
 
