@@ -1,15 +1,3 @@
-# react-library-skeleton
+# redux-plugins-immutable-react-router
 
-This is my personal skeleton for creating a React library component npm module.  You are welcome to use it.
-
-## Tools used
-
-* babel 6
-* karma
-* karma-webpack
-* jasmine
-* enzyme
-* eslint
-* flow
-
-The `prepublish` script checks the output of `eslint`, `flow`, and `karma`.
+Inject routes into react-router from [plugins in redux state](github.com/jcoreio/redux-plugins-immutable)
