@@ -1,6 +1,6 @@
 {
   "name": "redux-plugins-immutable-react-router",
-  "version": "1.0.0-beta4",
+  "version": "1.0.0-beta5",
   "description": "Inject routes into react-router from plugins in redux state",
   "main": "lib/index.js",
   "scripts": {
@@ -70,7 +70,6 @@
   },
   "dependencies": {
     "lodash.memoize": "^4.0.0",
-    "lodash.size": "^4.0.0",
-    "lodash.mapvalues": "^4.0.0"
+    "lodash.size": "^4.0.0"
   }
 }

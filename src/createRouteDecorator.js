@@ -3,10 +3,9 @@
 import React from 'react'
 import {Route, createRoutes} from 'react-router'
 import size from 'lodash.size'
-import mapValues from 'lodash.mapvalues'
-import {LoadPluginComponent, PluginComponents} from 'redux-plugins-immutable-react'
 
 import selectPluginRoutes from './selectPluginRoutes'
+import LoadRoutePluginComponents from './LoadRoutePluginComponents'
 
 export default function createRouteDecorator(store: Object): (routes: any) => any {
   function wrapGetChildRoutes(func: Function, ...args: any[]): any {
@@ -95,66 +94,14 @@ export default function createRouteDecorator(store: Object): (routes: any) => an
     // COMPONENT
     ////////////////////////////////////////////////////////////////////////////////
 
-    const {getComponent, getComponentFromStore, getComponentFromPlugin, componentKey,
-      pluginKey, componentProps} = route
+    const {getComponent, getComponentFromStore, getComponentFromPlugin, componentKey} = route
 
     if (!getComponent && (getComponentFromStore || getComponentFromPlugin || componentKey)) {
       if (getComponentFromStore) {
         newProps.getComponent = (nextState, cb) => getComponentFromStore(nextState, store, cb)
       }
-      else if (getComponentFromPlugin) {
-        if (pluginKey) {
-          newProps.component = props =>
-            <LoadPluginComponent getComponent={getComponentFromPlugin} pluginKey={pluginKey}
-                componentProps={componentProps ? {...componentProps, ...props} : props}
-            />
-        }
-        else {
-          newProps.component = props =>
-            <PluginComponents getComponent={getComponentFromPlugin}
-                componentProps={componentProps ? {...componentProps, ...props}: props}
-            />
-        }
-      }
-      else if (componentKey) {
-        if (pluginKey) {
-          newProps.component = props =>
-            <LoadPluginComponent componentKey={componentKey} pluginKey={pluginKey}
-                componentProps={componentProps ? {...componentProps, ...props} : props}
-            />
-        }
-        else {
-          newProps.component = props =>
-            <PluginComponents componentKey={componentKey}
-                componentProps={componentProps ? {...componentProps, ...props}: props}
-            />
-        }
-      }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // COMPONENTS
-    ////////////////////////////////////////////////////////////////////////////////
-
-    const {getComponents, getComponentsFromStore, getComponentsFromPlugin, componentKeys} = route
-
-    if (!getComponents && (getComponentsFromStore || getComponentsFromPlugin || componentKeys)) {
-      if (getComponentsFromStore) {
-        newProps.getComponents = (nextState, cb) => getComponentsFromStore(nextState, store, cb)
-      }
-      else if (componentKeys) {
-        if (pluginKey) {
-          newProps.components = mapValues(componentKeys, componentKey =>
-            props => <LoadPluginComponent componentKey={componentKey} pluginKey={pluginKey}
-                componentProps={componentProps ? {...componentProps, ...props}: props}
-                     />)
-        }
-        else {
-          newProps.components = mapValues(componentKeys, componentKey =>
-            props => <PluginComponents componentKey={componentKey}
-                componentProps={componentProps ? {...componentProps, ...props}: props}
-                     />)
-        }
+      else if (getComponentFromPlugin || componentKey) {
+        newProps.component = LoadRoutePluginComponents
       }
     }
 
