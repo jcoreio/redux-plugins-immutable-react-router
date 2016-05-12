@@ -19,8 +19,10 @@ export default class LoadRoutePluginComponents extends Component<void, Props, vo
     route: PropTypes.object
   };
   render(): ?React.Element {
-    const {props} = this
-    const {pluginKey, componentKey, getComponentFromPlugin: getComponent, componentProps} = props.route
+    const {props: {route}} = this
+    if (!route) return null
+    
+    const {pluginKey, componentKey, getComponentFromPlugin: getComponent, componentProps} = route
     if (componentKey || getComponent) {
       if (pluginKey) {
         return (<LoadPluginComponent pluginKey={pluginKey} componentKey={componentKey} getComponent={getComponent}
