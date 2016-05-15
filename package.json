@@ -1,6 +1,6 @@
 {
   "name": "redux-plugins-immutable-react-router",
-  "version": "1.0.0-beta10",
+  "version": "1.0.0-beta11",
   "description": "Inject routes into react-router from plugins in redux state",
   "main": "lib/index.js",
   "scripts": {
@@ -27,6 +27,7 @@
   "peerDependencies": {
     "immutable": "^3.0.0",
     "reselect": "^2.0.0",
+    "react-redux": "^4.0.0",
     "react-router": "^2.0.0",
     "redux-plugins-immutable": "^1.0.2",
     "redux-plugins-immutable-react": "^1.0.0"
@@ -62,6 +63,7 @@
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
     "redux": "^3.5.2",
+    "redux-logger": "^2.6.1",
     "redux-plugins-immutable": "^1.2.0",
     "redux-plugins-immutable-react": "^1.1.0",
     "reselect": "^2.5.1",

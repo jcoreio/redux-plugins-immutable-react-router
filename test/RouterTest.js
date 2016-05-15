@@ -53,6 +53,7 @@ describe('Router', () => {
     const PLUGIN_KEY = 'plugin1'
 
     const TestRoute = <Route path="test" componentKey="test" pluginKey={PLUGIN_KEY} />
+    const TestRoute2 = <Route path="test2" componentKey="test2" pluginKey={PLUGIN_KEY} />
     const TestComponent = () => <h1>It works!</h1>
     const TestComponent2 = () => <h1>It really works!</h1>
 
@@ -64,7 +65,7 @@ describe('Router', () => {
       key: PLUGIN_KEY,
       name: 'Plugin 1',
       routes: Immutable.Map({
-        test: TestRoute
+        Root: TestRoute
       }),
       load: (store, cb) => cb(null, Immutable.fromJS({
         components: Immutable.Map({
@@ -76,32 +77,36 @@ describe('Router', () => {
     const comp = mount(
       <Provider store={store}>
         <Router history={hashHistory}>
-          <Route path="/" component="div">
-            {TestRoute}
-          </Route>
+          <Route path="/" component="div" childRoutesKey="Root" />
         </Router>
       </Provider>
     )
 
-    store.dispatch(pluginActions.replacePlugin(Immutable.fromJS({
-      key: PLUGIN_KEY,
-      name: 'Plugin 1',
-      routes: Immutable.Map({
-        test: TestRoute
-      }),
-      load: (store, cb) => cb(null, Immutable.fromJS({
-        components: Immutable.Map({
-          test: TestComponent2
-        })
-      }))
-    })))
-
     setTimeout(() => {
+      store.dispatch(pluginActions.replacePlugin(Immutable.fromJS({
+        key: PLUGIN_KEY,
+        name: 'Plugin 2',
+        routes: Immutable.Map({
+          Root: [TestRoute, TestRoute2]
+        }),
+        load: (store, cb) => {
+          cb(null, Immutable.fromJS({
+            components: Immutable.Map({
+              test: TestComponent,
+              test2: TestComponent2
+            })
+          }))
+        }
+      })))
       hashHistory.push('/test')
+
       setTimeout(() => {
-        expect(comp.text()).toBe('It really works!')
-        done()
-      }, 50)
+        hashHistory.push('/test2')
+        setTimeout(() => {
+          expect(comp.text()).toBe('It really works!')
+          done()
+        }, 50)
+      }, 100)
     }, 100)
   })
 })
