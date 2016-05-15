@@ -12,7 +12,11 @@ type Props = {
   routes?: any[]
 };
 
-export default class Router extends Component<void, Props, void> {
+type State = {
+  key: number 
+};
+
+export default class Router extends Component<void, Props, State> {
   static propTypes = {
     children: PropTypes.any,
     routes: PropTypes.array,
@@ -20,6 +24,10 @@ export default class Router extends Component<void, Props, void> {
   };
   static contextTypes = {
     store: PropTypes.object
+  };
+  
+  state: State = {
+    key: 0
   };
 
   router: ?Object;
@@ -52,8 +60,7 @@ export default class Router extends Component<void, Props, void> {
       const {lastPlugins} = this
       const nextPlugins = this.lastPlugins = store.getState().get('plugins')
       if (lastPlugins !== nextPlugins) {
-        console.log("TEST")
-        router.refresh()
+        this.setState({key: this.state.key + 1})
       }
     }
   };
@@ -69,7 +76,7 @@ export default class Router extends Component<void, Props, void> {
   );
 
   render(): React.Element {
-    return <ReactRouter {...this.props} ref={c => this.router = c}
+    return <ReactRouter {...this.props} key={this.state.key} ref={c => this.router = c}
                                         routes={this.selectRoutes(this.props, this.context)} children={null} />
   }
 }
