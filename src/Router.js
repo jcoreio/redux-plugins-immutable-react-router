@@ -2,24 +2,24 @@
 
 import React, {Component, PropTypes} from 'react'
 import {Router as ReactRouter} from 'react-router'
+import {connect} from 'react-redux'
 import {createSelector} from 'reselect'
+import * as Immutable from 'immutable'
 
 import decorateRoutes from './decorateRoutes'
 
 type Props = {
-  store?: Object,
   children?: any,
   routes?: any[]
 };
 
-export default class Router extends Component<void, Props, void> {
+class Router extends Component<void, Props, void> {
   static propTypes = {
     children: PropTypes.any,
-    routes: PropTypes.array,
-    store: PropTypes.object
+    routes: PropTypes.array
   };
   static contextTypes = {
-    store: PropTypes.object
+    store: PropTypes.object.isRequired
   };
 
   // cache routes so that we don't pass a new copy of the same routes to ReactRouter.
@@ -27,7 +27,7 @@ export default class Router extends Component<void, Props, void> {
   // would warn that the routes shouldn't be changed.  However, if the user does change the routes, this will make
   // it warn correctly.
   selectRoutes: (props: Props, context: Object) => any = createSelector(
-    (props, context) => props.store || context.store,
+    (props, context) => context.store,
     props => props.routes || props.children,
     (store, routes) => decorateRoutes(store)(routes)
   );
@@ -36,3 +36,11 @@ export default class Router extends Component<void, Props, void> {
     return <ReactRouter {...this.props} routes={this.selectRoutes(this.props, this.context)} children={null} />
   }
 }
+
+function select(state: Immutable.Map): Object {
+  return {
+    plugins: state.get('plugins')
+  }
+}
+
+export default connect(select)(Router)
