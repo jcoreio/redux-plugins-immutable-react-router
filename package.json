@@ -1,6 +1,6 @@
 {
   "name": "redux-plugins-immutable-react-router",
-  "version": "1.0.0-beta9",
+  "version": "1.0.0-beta10",
   "description": "Inject routes into react-router from plugins in redux state",
   "main": "lib/index.js",
   "scripts": {
@@ -54,6 +54,7 @@
     "karma-safari-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
+    "mindfront-redux-utils": "^1.0.1",
     "progress-bar-webpack-plugin": "^1.6.0",
     "react": "^15.0.2",
     "react-addons-test-utils": "^15.0.2",
@@ -61,8 +62,8 @@
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
     "redux": "^3.5.2",
-    "redux-plugins-immutable": "^1.0.4",
-    "redux-plugins-immutable-react": "^1.0.0",
+    "redux-plugins-immutable": "^1.2.0",
+    "redux-plugins-immutable-react": "^1.1.0",
     "reselect": "^2.5.1",
     "webpack": "^1.12.15",
     "webpack-dev-server": "^1.14.1",
