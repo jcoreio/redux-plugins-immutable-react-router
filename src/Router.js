@@ -4,7 +4,7 @@ import React, {Component, PropTypes} from 'react'
 import {Router as ReactRouter} from 'react-router'
 import {createSelector} from 'reselect'
 
-import createRouteDecorator from './createRouteDecorator'
+import decorateRoutes from './decorateRoutes'
 
 type Props = {
   store?: Object,
@@ -29,7 +29,7 @@ export default class Router extends Component<void, Props, void> {
   selectRoutes: (props: Props, context: Object) => any = createSelector(
     (props, context) => props.store || context.store,
     props => props.routes || props.children,
-    (store, routes) => createRouteDecorator(store)(routes)
+    (store, routes) => decorateRoutes(store)(routes)
   );
 
   render(): React.Element {

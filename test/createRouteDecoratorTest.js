@@ -4,7 +4,7 @@ import * as Immutable from 'immutable'
 import {pluginReducer, pluginMiddleware, pluginActions} from 'redux-plugins-immutable'
 import {createStore, applyMiddleware} from 'redux'
 
-import createRouteDecorator from '../src/createRouteDecorator'
+import createRouteDecorator from '../src/decorateRoutes'
 
 describe('createRouteDecorator', () => {
   describe('childRoutes helpers', () => {
@@ -35,6 +35,11 @@ describe('createRouteDecorator', () => {
       routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
+
+      // test memoization
+      let result2
+      routes[0].getChildRoutes(null, (err, routes) => result2 = routes)
+      expect(result).toBe(result2)
     })
     it('processes childRoutes', () => {
       const TestRoute = <Route path="test" getChildRoutesFromStore={(location, store, cb) => []} />
@@ -79,6 +84,11 @@ describe('createRouteDecorator', () => {
       routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
+
+      // test memoization
+      let result2
+      routes[0].getChildRoutes(null, (err, routes) => result2 = routes)
+      expect(result2).toBe(result)
     })
     it('processes getChildRoutesFromPlugin', () => {
       const TestRoute = <Route path="test" getChildRoutesFromPlugin={(location, plugin, cb) => []} />
@@ -107,6 +117,11 @@ describe('createRouteDecorator', () => {
       routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
+
+      // test memoization
+      let result2
+      routes[0].getChildRoutes(null, (err, routes) => result2 = routes)
+      expect(result2).toBe(result)
     })
     it('processes childRoutesKey', () => {
       const TestRoute = <Route path="test" childRoutesKey="nonexistent" />
@@ -135,6 +150,11 @@ describe('createRouteDecorator', () => {
       routes[0].getChildRoutes(null, (err, routes) => result = routes)
       expect(result[0].path).toBe('test')
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
+
+      // test memoization
+      let result2
+      routes[0].getChildRoutes(null, (err, routes) => result2 = routes)
+      expect(result2).toBe(result)
     })
   })
 
@@ -166,6 +186,11 @@ describe('createRouteDecorator', () => {
       routes[0].getIndexRoute(null, (err, route) => result = route)
       expect(result.component).toBe('div')
       expect(result.getIndexRoute instanceof Function).toBe(true)
+
+      // test memoization
+      let result2
+      routes[0].getIndexRoute(null, (err, route) => result2 = route)
+      expect(result2).toBe(result)
     })
     it('processes indexRoute', () => {
       const TestRoute = <IndexRoute getComponentFromStore={() => null} />
@@ -215,6 +240,10 @@ describe('createRouteDecorator', () => {
       expect(result.component).toBe('div')
       expect(result.getIndexRoute instanceof Function).toBe(true)
 
+      // test memoization
+      let result2
+      routes[0].getIndexRoute(null, (err, route) => result2 = route)
+      expect(result2).toBe(result)
     })
     it('processes getIndexRouteFromPlugin', () => {
       const TestRoute = <IndexRoute getComponentFromStore={() => null} />
@@ -242,6 +271,11 @@ describe('createRouteDecorator', () => {
 
       routes[0].getIndexRoute(null, (err, route) => result = route)
       expect(result.getComponent instanceof Function).toBe(true)
+
+      // test memoization
+      let result2
+      routes[0].getIndexRoute(null, (err, route) => result2 = route)
+      expect(result2).toBe(result)
     })
     it('processes indexRouteKey', () => {
       const TestRoute = <IndexRoute getComponentFromStore={() => null} />
