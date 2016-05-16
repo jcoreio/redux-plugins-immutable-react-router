@@ -2,9 +2,7 @@
 
 import React, {Component, PropTypes} from 'react'
 import {Router as ReactRouter} from 'react-router'
-import {connect} from 'react-redux'
 import {createSelector} from 'reselect'
-import * as Immutable from 'immutable'
 
 import decorateRoutes from './decorateRoutes'
 
@@ -13,7 +11,7 @@ type Props = {
   routes?: any[]
 };
 
-class Router extends Component<void, Props, void> {
+export default class Router extends Component<void, Props, void> {
   static propTypes = {
     children: PropTypes.any,
     routes: PropTypes.array
@@ -36,11 +34,3 @@ class Router extends Component<void, Props, void> {
     return <ReactRouter {...this.props} routes={this.selectRoutes(this.props, this.context)} children={null} />
   }
 }
-
-function select(state: Immutable.Map): Object {
-  return {
-    plugins: state.get('plugins')
-  }
-}
-
-export default connect(select)(Router)
