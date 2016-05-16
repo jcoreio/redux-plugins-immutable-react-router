@@ -21,10 +21,12 @@ const selectPluginRoutes: (routeKeyOrFunc: string | (plugin: Immutable.Map) => a
     const getRoutes = routeKeyOrFunc instanceof Function
       ? routeKeyOrFunc
       : plugin => plugin.getIn(['routes', routeKeyOrFunc])
+
     const stage0 = createSelector(
       state => state.get('plugins'),
       plugins => plugins.map(getRoutes)
     )
+
     return createShallowEqualSelector(
       state => stage0(state),
       routeMap => {
@@ -35,7 +37,9 @@ const selectPluginRoutes: (routeKeyOrFunc: string | (plugin: Immutable.Map) => a
             else result.push(routes)
           }
         })
-        return result
+        return result.map((route, index) => React.isValidElement(route)
+          ? React.cloneElement(route, {key: index})
+          : route)
       }
     )
   }
