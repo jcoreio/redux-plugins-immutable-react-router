@@ -119,6 +119,8 @@ describe('createRouteDecorator', () => {
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
 
       // test memoization
+      
+      store.dispatch(pluginActions.loadPlugin(PLUGIN_KEY))
       let result2
       routes[0].getChildRoutes(null, (err, routes) => result2 = routes)
       expect(result2).toBe(result)
@@ -152,6 +154,7 @@ describe('createRouteDecorator', () => {
       expect(result[0].getChildRoutes instanceof Function).toBe(true)
 
       // test memoization
+      store.dispatch(pluginActions.loadPlugin(PLUGIN_KEY))
       let result2
       routes[0].getChildRoutes(null, (err, routes) => result2 = routes)
       expect(result2).toBe(result)
@@ -273,6 +276,7 @@ describe('createRouteDecorator', () => {
       expect(result.getComponent instanceof Function).toBe(true)
 
       // test memoization
+      store.dispatch(pluginActions.loadPlugin(PLUGIN_KEY))
       let result2
       routes[0].getIndexRoute(null, (err, route) => result2 = route)
       expect(result2).toBe(result)
@@ -303,6 +307,12 @@ describe('createRouteDecorator', () => {
 
       routes[0].getIndexRoute(null, (err, route) => result = route)
       expect(result.getComponent instanceof Function).toBe(true)
+      
+      // test memoization
+      store.dispatch(pluginActions.loadPlugin(PLUGIN_KEY))
+      let result2
+      routes[0].getIndexRoute(null, (err, route) => result2 = route)
+      expect(result2).toBe(result)
     })
   })
   describe('component helpers', () => {
