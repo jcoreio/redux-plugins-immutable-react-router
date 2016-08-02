@@ -30,7 +30,7 @@ export default class Router extends Component<void, Props, void> {
     (store, routes) => decorateRoutes(store)(routes)
   );
 
-  render(): React.Element {
+  render(): React.Element<any> {
     return <ReactRouter {...this.props} routes={this.selectRoutes(this.props, this.context)} children={null} />
   }
 }

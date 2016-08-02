@@ -16,7 +16,7 @@ function shallowEqual(a, b) {
 
 const createShallowEqualSelector = createSelectorCreator(defaultMemoize, shallowEqual)
 
-const selectPluginRoutes: (routeKeyOrFunc: string | (plugin: Immutable.Map) => any) => (state: any) => any[] = memoize(
+const selectPluginRoutes: (routeKeyOrFunc: string | (plugin: Immutable.Map<any, any>) => any) => (state: any) => any[] = memoize(
   routeKeyOrFunc => {
     const getRoutes = routeKeyOrFunc instanceof Function
       ? routeKeyOrFunc

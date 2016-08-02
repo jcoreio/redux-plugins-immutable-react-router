@@ -9,7 +9,7 @@ type Props = {
   route: {
     pluginKey?: string | Symbol,
     componentKey?: string | Symbol,
-    getComponentFromPlugin?: (plugin: Immutable.Map) => any,
+    getComponentFromPlugin?: (plugin: Immutable.Map<any, any>) => any,
     componentProps?: Object
   }
 };
@@ -18,7 +18,7 @@ export default class LoadRoutePluginComponents extends Component<void, Props, vo
   static propTypes = {
     route: PropTypes.object
   };
-  render(): ?React.Element {
+  render(): ?React.Element<any> {
     const {props} = this
 
     const {pluginKey, componentKey, getComponentFromPlugin: getComponent, componentProps} = props.route
