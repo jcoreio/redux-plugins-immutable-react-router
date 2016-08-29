@@ -18,20 +18,37 @@ export default class LoadRoutePluginComponents extends Component<void, Props, vo
   static propTypes = {
     route: PropTypes.object
   };
-  render(): ?React.Element<any> {
-    const {props} = this
 
-    const {pluginKey, componentKey, getComponentFromPlugin: getComponent, componentProps} = props.route
+  render(): ?React.Element<any> {
+    const {componentKey, getComponentFromPlugin: getComponent} = this.props.route
     if (componentKey || getComponent) {
+      const {pluginKey, componentProps} = this.props.route
+      const props = {...this.props}
+      delete props.route
+      if (componentProps) {
+        for (let prop in componentProps) {
+          props[prop] = componentProps[prop]
+        }
+      }
+
       if (pluginKey) {
-        return (<LoadPluginComponent pluginKey={pluginKey} componentKey={componentKey} getComponent={getComponent}
-            componentProps={componentProps ? {...componentProps, ...props} : props}
-                />)
+        return (
+          <LoadPluginComponent
+              pluginKey={pluginKey}
+              componentKey={componentKey}
+              getComponent={getComponent}
+              componentProps={props}
+          />
+        )
       }
       else {
-        return (<PluginComponents componentKey={componentKey} getComponent={getComponent}
-            componentProps={componentProps ? {...componentProps, ...props} : props}
-                />)
+        return (
+          <PluginComponents
+              componentKey={componentKey}
+              getComponent={getComponent}
+              componentProps={props}
+          />
+        )
       }
     }
     return null
