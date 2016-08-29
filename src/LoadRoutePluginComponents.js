@@ -23,13 +23,7 @@ export default class LoadRoutePluginComponents extends Component<void, Props, vo
     const {componentKey, getComponentFromPlugin: getComponent} = this.props.route
     if (componentKey || getComponent) {
       const {pluginKey, componentProps} = this.props.route
-      const props = {...this.props}
-      delete props.route
-      if (componentProps) {
-        for (let prop in componentProps) {
-          props[prop] = componentProps[prop]
-        }
-      }
+      const props = componentProps ? {...componentProps, ...this.props} : this.props
 
       if (pluginKey) {
         return (
